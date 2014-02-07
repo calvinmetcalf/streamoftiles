@@ -29,6 +29,11 @@ TileStream.prototype._read = function(){
 		return;
 	}
 	var self = this;
+	var flowing = this.push({
+		x: this.curX,
+		y: this.curY,
+		z: this.z
+	});
 	this.curX++;
 	if(this.curX>this.maxX){
 		this.curX=this.minX;
@@ -41,11 +46,7 @@ TileStream.prototype._read = function(){
 			}
 		}
 	}
-	if(!this.done && this.push({
-		x: this.curX,
-		y: this.curY,
-		z: this.z
-	})){
+	if(!this.done && flowing){
 		process.nextTick(function(){
 			self._read();
 		});
