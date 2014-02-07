@@ -1,6 +1,6 @@
 {
   "name": "streamoftiles",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "stream of all tiles given coordinates",
   "main": "index.js",
   "scripts": {
