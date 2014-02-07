@@ -4,7 +4,7 @@
   "description": "stream of all tiles given coordinates",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha test.js"
   },
   "repository": {
     "type": "git",
@@ -14,5 +14,14 @@
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/calvinmetcalf/streamoftiles/issues"
+  },
+  "dependencies": {
+    "sphericalmercator": "~1.0.2",
+    "readable-stream": "~1.1.10"
+  },
+  "devDependencies": {
+    "event-stream": "~3.1.0",
+    "chai": "~1.9.0",
+    "mocha": "~1.17.1"
   }
 }
