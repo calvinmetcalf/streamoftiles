@@ -7,6 +7,7 @@ var sm = new SphericalMercator({
 util.inherits(TileStream, Readable);
 
 function TileStream(min, max, bbox) {
+  // console.log(min,max, bbox);
 	Readable.call(this, {
 		objectMode: true
 	});
@@ -15,10 +16,12 @@ function TileStream(min, max, bbox) {
 	this.bbox = bbox;
 	this.z = min - 1;
 	this.bumpZ();
+  // console.log(this.curX, this.curY, this.z);
 	this.done = false;
 }
 TileStream.prototype.bumpZ = function(){
 	var xyz = sm.xyz(this.bbox, ++this.z);
+  // console.log(xyz);
 	this.curX = this.minX = xyz.minX;
 	this.maxX = xyz.maxX;
 	this.curY = xyz.minY;
@@ -29,27 +32,27 @@ TileStream.prototype._read = function(){
 		return;
 	}
 	var self = this;
-	var flowing = this.push({
-		x: this.curX,
-		y: this.curY,
-		z: this.z
-	});
-	this.curX++;
-	if(this.curX>this.maxX){
-		this.curX=this.minX;
-		this.curY++;
-		if(this.curY>this.maxY){
-			this.bumpZ();
-			if(this.z>this.max){
-				this.done = true;
-				this.push(null);
-			}
-		}
-	}
-	if(!this.done && flowing){
-		process.nextTick(function(){
-			self._read();
-		});
-	}
+	var flowing = true;
+  while (flowing) {
+    // console.log(this.curX, this.curY, this.z);
+    flowing = this.push({
+  		x: this.curX,
+  		y: this.curY,
+  		z: this.z
+  	});
+  	this.curX++;
+  	if(this.curX>this.maxX){
+  		this.curX=this.minX;
+  		this.curY++;
+  		if(this.curY>this.maxY){
+  			this.bumpZ();
+  			if(this.z>this.max){
+  				this.done = true;
+  				this.push(null);
+          return;
+  			}
+  		}
+  	}
+  }
 };
 module.exports = TileStream;
